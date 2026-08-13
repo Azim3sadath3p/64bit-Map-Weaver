@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Terrain, VectorObject, VectorPoint } from '../types';
+import { Terrain, VectorObject, VectorPoint, WaterDrawMode } from '../types';
 import { TERRAIN_MAP } from '../constants';
 import { Tool } from './Toolbar';
 import { getConvexHull } from '../utils/convexHull';
@@ -15,6 +15,7 @@ interface DrawingCanvasProps {
   currentTool: Tool;
   selectedShapeId: string | null;
   onSelectShape: (id: string | null) => void;
+  waterDrawMode: WaterDrawMode;
 }
 
 const pointsToString = (points: VectorPoint[]) => {
@@ -31,6 +32,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
   currentTool,
   selectedShapeId,
   onSelectShape,
+  waterDrawMode,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -117,7 +119,9 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
       setIsPainting(false);
       
       if (paintedPixels.length > 5) { // Threshold for creating a shape/line
-        if (selectedTerrain?.id === 'road') {
+        const isPathDrawing = selectedTerrain?.id === 'road' || (selectedTerrain?.id === 'water' && waterDrawMode === 'path');
+        
+        if (isPathDrawing) {
           // Simplify path for lines, epsilon can be tuned.
           const simplifiedLine = simplifyPath(paintedPixels, 5.0);
           onLineDrawEnd(simplifiedLine, brushSize);
@@ -136,7 +140,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({
     } else if (currentTool === 'edit' && draggedPointInfo) {
       setDraggedPointInfo(null);
     }
-  }, [currentTool, isPainting, paintedPixels, onShapeDrawEnd, onLineDrawEnd, draggedPointInfo, selectedTerrain, brushSize]);
+  }, [currentTool, isPainting, paintedPixels, onShapeDrawEnd, onLineDrawEnd, draggedPointInfo, selectedTerrain, brushSize, waterDrawMode]);
 
   // Global listeners for mouse move and up to handle dragging outside the canvas
   useEffect(() => {

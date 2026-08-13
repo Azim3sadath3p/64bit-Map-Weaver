@@ -5,7 +5,7 @@ import TerrainPalette from './components/TerrainPalette';
 import ControlPanel from './components/ControlPanel';
 import GeneratedMap from './components/GeneratedMap';
 import Toolbar, { Tool } from './components/Toolbar';
-import { VectorObject, VectorPoint, VectorShape, VectorLine, ModalImageData, MapStyle, AnalysisRecord } from './types';
+import { VectorObject, VectorPoint, VectorShape, VectorLine, ModalImageData, MapStyle, AnalysisRecord, WaterDrawMode } from './types';
 import ImageModal from './components/ImageModal';
 import ApiKeyModal from './components/ApiKeyModal';
 import { useMapGeneration } from './hooks/useMapGeneration';
@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [brushSize, setBrushSize] = useState<number>(30);
   const [currentTool, setCurrentTool] = useState<Tool>('brush');
   const [selectedShapeId, setSelectedShapeId] = useState<string | null>(null);
+  const [waterDrawMode, setWaterDrawMode] = useState<WaterDrawMode>('blob');
   
   // History State
   const [history, setHistory] = useState<VectorObject[][]>([[]]);
@@ -293,6 +294,7 @@ const App: React.FC = () => {
                   currentTool={currentTool}
                   selectedShapeId={selectedShapeId}
                   onSelectShape={setSelectedShapeId}
+                  waterDrawMode={waterDrawMode}
                 />
             </div>
             <GeneratedMap 
@@ -314,6 +316,8 @@ const App: React.FC = () => {
             <TerrainPalette
               selectedTerrainId={selectedTerrainId}
               onSelectTerrain={setSelectedTerrainId}
+              waterDrawMode={waterDrawMode}
+              onWaterDrawModeChange={setWaterDrawMode}
             />
              <Toolbar
               currentTool={currentTool}

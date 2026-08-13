@@ -1,14 +1,20 @@
-
 import React from 'react';
-import type { Terrain } from '../types';
+import type { Terrain, WaterDrawMode } from '../types';
 import { TERRAINS } from '../constants';
 
 interface TerrainPaletteProps {
   selectedTerrainId: string | null;
   onSelectTerrain: (id: string) => void;
+  waterDrawMode: WaterDrawMode;
+  onWaterDrawModeChange: (mode: WaterDrawMode) => void;
 }
 
-const TerrainPalette: React.FC<TerrainPaletteProps> = ({ selectedTerrainId, onSelectTerrain }) => {
+const TerrainPalette: React.FC<TerrainPaletteProps> = ({ 
+  selectedTerrainId, 
+  onSelectTerrain,
+  waterDrawMode,
+  onWaterDrawModeChange
+}) => {
   return (
     <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-4 shadow-lg">
       <h3 className="text-lg font-bold text-amber-300 mb-4">Terrain Palette</h3>
@@ -28,6 +34,25 @@ const TerrainPalette: React.FC<TerrainPaletteProps> = ({ selectedTerrainId, onSe
           </button>
         ))}
       </div>
+      {selectedTerrainId === 'water' && (
+        <div className="mt-4 pt-4 border-t border-gray-700">
+          <label className="block text-sm font-medium text-amber-300 mb-2">Water Drawing Mode</label>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => onWaterDrawModeChange('blob')}
+              className={`py-2 px-2 text-sm rounded-md transition-colors ${waterDrawMode === 'blob' ? 'bg-amber-600 text-white font-bold' : 'bg-gray-600 hover:bg-gray-500'}`}
+            >
+              Blob
+            </button>
+            <button
+              onClick={() => onWaterDrawModeChange('path')}
+              className={`py-2 px-2 text-sm rounded-md transition-colors ${waterDrawMode === 'path' ? 'bg-amber-600 text-white font-bold' : 'bg-gray-600 hover:bg-gray-500'}`}
+            >
+              Path
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

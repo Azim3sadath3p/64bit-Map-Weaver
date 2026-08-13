@@ -37,6 +37,7 @@ export interface ModalImageData {
 }
 
 export type MapStyle = 'photorealistic' | 'pixel';
+export type WaterDrawMode = 'blob' | 'path';
 
 export interface AnalysisRecord {
   revision: number;
