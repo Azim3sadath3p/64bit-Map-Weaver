@@ -1,5 +1,0 @@
-{
-  "name": "Hybrid Refinement Fork - D&D Map Weaver",
-  "description": "An AI-powered application to generate Dungeons & Dragons battle maps. Draw areas with terrain descriptors like 'grass' or 'road', provide a style prompt, and watch as a unique map image is generated for your adventures.",
-  "requestFramePermissions": []
-}
